@@ -45,8 +45,7 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-  const maxAnecdoctesIndex = anecdotes.length-1
-
+  
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
 
@@ -56,7 +55,7 @@ const App = () => {
       {anecdotes[selected]} <br />
       has {points[selected]} votes <br />
       <Button handleClick={handleVote(selected, points, setPoints)} text='vote' />
-      <Button handleClick={handleNextAnecdote(maxAnecdoctesIndex, setSelected)} text='next anecdotes' />
+      <Button handleClick={handleNextAnecdote(anecdotes.length, setSelected)} text='next anecdotes' />
       <h1>Anecdoate with most votes</h1>
       {anecdotes[findMostVoteIndex(points)]}
     </div>
