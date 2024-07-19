@@ -6,6 +6,18 @@ const randomInt = (max) => {
   return result
 }
 
+const findMostVoteIndex = (points) =>  {
+  let maxIndex = 0
+
+  for(let i =0; i < points.length; i++) {
+    if(points[i] > points[maxIndex]) {
+      maxIndex = i
+    }
+  }
+
+  return maxIndex
+}
+
 const handleNextAnecdote = (max, setSelected) => () => setSelected(randomInt(max))
 
 const handleVote = (selected, points, setPoints) => {
@@ -40,10 +52,13 @@ const App = () => {
 
   return (
     <div>
+      <h1>Anecdoate of the day</h1>
       {anecdotes[selected]} <br />
       has {points[selected]} votes <br />
       <Button handleClick={handleVote(selected, points, setPoints)} text='vote' />
       <Button handleClick={handleNextAnecdote(maxAnecdoctesIndex, setSelected)} text='next anecdotes' />
+      <h1>Anecdoate with most votes</h1>
+      {anecdotes[findMostVoteIndex(points)]}
     </div>
   )
 }
