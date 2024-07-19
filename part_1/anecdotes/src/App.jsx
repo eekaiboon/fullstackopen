@@ -6,8 +6,14 @@ const randomInt = (max) => {
   return result
 }
 
-const handleNextAnecdote = (max, setSelected) => {
-  return () => setSelected(randomInt(max))
+const handleNextAnecdote = (max, setSelected) => () => setSelected(randomInt(max))
+
+const handleVote = (selected, points, setPoints) => {
+  console.log('selected: ', selected, 'before points: ', points)
+  const copy = [...points]
+  copy[selected] += 1
+  console.log('after points', copy)
+  return () => setPoints(copy)
 }
 
 const Button = ( {handleClick, text}) => (
@@ -27,13 +33,16 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-  
   const maxAnecdoctesIndex = anecdotes.length-1
+
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      {anecdotes[selected]} <br />
+      has {points[selected]} votes <br />
+      <Button handleClick={handleVote(selected, points, setPoints)} text='vote' />
       <Button handleClick={handleNextAnecdote(maxAnecdoctesIndex, setSelected)} text='next anecdotes' />
     </div>
   )
