@@ -22,7 +22,19 @@ const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
     const dup = persons.find(person => person.name === newName)
     
     if (dup) {
-      alert(`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const updatePerson = {...dup, number: newNumber}
+
+        personService
+          .update(updatePerson)
+          .then(updatePerson => {
+            const updatePersons = persons.map(person => person.id != updatePerson.id ? person : updatePerson)
+            setPersons(updatePersons)
+            setFilteredPersons(updatePersons)
+          })
+      } else {
+        console.log(`Skipped updating an already existing person ${newName}`)
+      }
     } else {
       const newPerson = {
         name: newName,
