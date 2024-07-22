@@ -27,7 +27,7 @@ const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
       const newPerson = {
         name: newName,
         number: newNumber,
-        id: persons.length+1
+        id: String(persons.length+1)
       }
       
       personService
