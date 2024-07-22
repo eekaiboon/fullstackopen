@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import axios from 'axios'
+import personService from '../services/persons'
 
 const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
   const [newName, setNewName] = useState('')
@@ -27,11 +29,14 @@ const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
         number: newNumber,
         id: persons.length+1
       }
-      console.log('before', persons)
-      const newPersons = persons.concat(newPerson)
-      setPersons(newPersons)
-      setFilteredPersons(newPersons)
-      console.log('after', persons.concat(newPerson))
+      
+      personService
+        .create(newPerson)
+        .then(newPerson => {
+          const newPersons = persons.concat(newPerson)
+          setPersons(newPersons)
+          setFilteredPersons(newPersons)
+      })
     }
 
     setNewName('')
