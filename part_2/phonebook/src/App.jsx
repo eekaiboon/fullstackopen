@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filteredPersons, setFilteredPersons] = useState(persons)
+  const [banner, setBanner] = useState(null)
 
   useEffect(
     () => {
@@ -20,14 +22,14 @@ const App = () => {
         )
     }
     ,[])
-  
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={banner} />
       <Filter persons={persons} setFilteredPersons={setFilteredPersons} />
       <h3>add a new</h3>
-      <PersonForm persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons} setBanner={setBanner} />
       <h3>Numbers</h3>
       <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons}/>
     </div>

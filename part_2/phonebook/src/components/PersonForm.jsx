@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import axios from 'axios'
 import personService from '../services/persons'
 
-const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
+const PersonForm = ({persons, setPersons,setFilteredPersons, setBanner}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
@@ -32,6 +31,8 @@ const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
             setPersons(updatePersons)
             setFilteredPersons(updatePersons)
           })
+
+        setBanner(`Updated number for ${newName}`)
       } else {
         console.log(`Skipped updating an already existing person ${newName}`)
       }
@@ -49,6 +50,8 @@ const PersonForm = ({persons, setPersons,setFilteredPersons}) => {
           setPersons(newPersons)
           setFilteredPersons(newPersons)
       })
+
+      setBanner(`Added ${newName}`)
     }
 
     setNewName('')
