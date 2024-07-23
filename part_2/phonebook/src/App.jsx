@@ -9,7 +9,8 @@ import './index.css'
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filteredPersons, setFilteredPersons] = useState(persons)
-  const [banner, setBanner] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(
     () => {
@@ -26,10 +27,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={banner} />
+      <Notification successMessage={successMessage} errorMessage={errorMessage} />
       <Filter persons={persons} setFilteredPersons={setFilteredPersons} />
       <h3>add a new</h3>
-      <PersonForm persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons} setBanner={setBanner} />
+      <PersonForm persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} />
       <h3>Numbers</h3>
       <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons}/>
     </div>

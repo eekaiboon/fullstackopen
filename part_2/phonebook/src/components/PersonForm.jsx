@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import personService from '../services/persons'
 
-const PersonForm = ({persons, setPersons,setFilteredPersons, setBanner}) => {
+const PersonForm = ({persons, setPersons, setFilteredPersons, setSuccessMessage, setErrorMessage}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
@@ -30,9 +30,12 @@ const PersonForm = ({persons, setPersons,setFilteredPersons, setBanner}) => {
             const updatePersons = persons.map(person => person.id != updatePerson.id ? person : updatePerson)
             setPersons(updatePersons)
             setFilteredPersons(updatePersons)
+            setSuccessMessage(`Updated number for ${newName}`)
           })
-
-        setBanner(`Updated number for ${newName}`)
+          .catch(error => {
+            console.log('update error:', error)
+            setErrorMessage(`${newName} has already been removed from server`)
+          })
       } else {
         console.log(`Skipped updating an already existing person ${newName}`)
       }
@@ -49,9 +52,8 @@ const PersonForm = ({persons, setPersons,setFilteredPersons, setBanner}) => {
           const newPersons = persons.concat(newPerson)
           setPersons(newPersons)
           setFilteredPersons(newPersons)
+          setSuccessMessage(`Added ${newName}`)
       })
-
-      setBanner(`Added ${newName}`)
     }
 
     setNewName('')
