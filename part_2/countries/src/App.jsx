@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Country = ({country}) => {
+const Country = ({ country }) => {
   if (country === null) {
     return null
   }
@@ -14,16 +14,31 @@ const Country = ({country}) => {
       area {country.area}
       <h2>languages:</h2>
       <ul>
-        {Object.values(country.languages).map(language => <li>{language}</li>)}
+        {Object.values(country.languages).map((language, index) => <li key={index}>{language}</li>)}
       </ul>
       <img src={country.flags.png} />
     </>
   )
 }
 
+const CountrySelection = ({ country, setRenderedCountry, setCountrySelections }) => {
+  const handleShow = () => {
+    setRenderedCountry(country)
+    setCountrySelections([])
+    console.log('show')
+  }
+
+  return <div>
+    {country.name.common} <button onClick={handleShow}>
+      show
+    </button>
+  </div>
+}
+
 function App() {
   const [searchedCountry, setSearchedCountry] = useState('')
-  const [countries, setCountries] = useState(null)
+  const [countrySelections, setCountrySelections] = useState([])
+  const [countries, setCountries] = useState([])
   const [renderedCountry, setRenderedCountry] = useState(null)
 
   useEffect(() => {
@@ -35,21 +50,29 @@ function App() {
         console.log('countries', countries)
         setCountries(countries)
       })
-    }, [])
+  }, [])
 
   const handleChange = (event) => {
     console.log('handleChange')
     const searchedCountry = event.target.value.toLowerCase()
+    setSearchedCountry(searchedCountry)
+    console.log('searchedCountry', searchedCountry)
 
-    const filteredCountry = countries.filter(country => country.name.common.toLowerCase().includes(searchedCountry))
-    console.log('filteredCountry', filteredCountry)
-    if (filteredCountry.length === 1) {
-      setRenderedCountry(filteredCountry[0])
+    const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchedCountry))
+    console.log('filteredCountry', filteredCountries)
+    if (filteredCountries.length === 1) {
+      setRenderedCountry(filteredCountries[0])
+      console.log('setRenderedCountry to', filteredCountries[0].name.common)
+
+      setCountrySelections([])
+      console.log('setCountrySelections to []')
     } else {
       setRenderedCountry(null)
-    }
+      console.log('setRenderedCountry to null')
 
-    setSearchedCountry(searchedCountry)
+      setCountrySelections(filteredCountries)
+      console.log('setCountrySelections')
+    }
   }
 
   return (
@@ -60,6 +83,11 @@ function App() {
           onChange={handleChange}
         />
         <Country country={renderedCountry} />
+        {
+          countrySelections.length > 10
+            ? <div>Too many matches, specify another filter</div>
+            : countrySelections.map(countrySelection => <CountrySelection key={countrySelection.name.common} country={countrySelection} setRenderedCountry={setRenderedCountry} setCountrySelections={setCountrySelections} />)
+        }
       </div>
     </>
   )
