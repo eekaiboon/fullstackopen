@@ -2,23 +2,57 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const Country = ({ country }) => {
+  const [weather, setWeather] = useState(null)
+
   if (country === null) {
+    if (weather !== null) {
+      setWeather(null)
+    }
     return null
   }
 
   console.log('country', country)
+
+  const lat = country.latlng[0]
+  const lon = country.latlng[1]
+  const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY
+
+  if (weather === null) {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
+      .then(response => response.data)
+      .then(weather => {
+        console.log('weather', weather)
+        setWeather(weather)
+      })
+  }
+
   return (
     <>
       <h1>{country.name.common}</h1>
       capital {country.capital[0]} <br />
       area {country.area}
-      <h2>languages:</h2>
+      <h3>languages:</h3>
       <ul>
         {Object.values(country.languages).map((language, index) => <li key={index}>{language}</li>)}
       </ul>
       <img src={country.flags.png} />
+      <Weather country={country} weather={weather} />
     </>
   )
+}
+
+const Weather = ({country, weather}) => {
+  if (weather === null) {
+    return null
+  }
+
+  return <>
+    <h2>Weather in {country.capital}</h2>
+    temperature - {weather.main.temp} Celcius<br />
+    <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} /> <br />
+    wind {weather.wind.speed} m/s
+  </>
 }
 
 const CountrySelection = ({ country, setRenderedCountry, setCountrySelections }) => {
