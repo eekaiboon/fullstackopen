@@ -17,12 +17,12 @@ const App = () => {
       personService
         .getAll()
         .then(persons => {
-            setPersons(persons)
-            setFilteredPersons(persons)
-          }
+          setPersons(persons)
+          setFilteredPersons(persons)
+        }
         )
     }
-    ,[])
+    , [])
 
   return (
     <div>
@@ -32,7 +32,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} />
       <h3>Numbers</h3>
-      <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons}/>
+      <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} setFilteredPersons={setFilteredPersons} />
     </div>
   )
 }
