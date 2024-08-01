@@ -5,7 +5,7 @@ const handleDelete = (deletePerson, persons, setPersons, setFilteredPersons) => 
   if (window.confirm(`Delete ${deletePerson.name}?`)) {
     personService
       .deletePerson(deletePerson)
-      .then(deletePerson => {
+      .then(response => {
         const updatedPersons = persons.filter(person => person.id != deletePerson.id)
         setPersons(updatedPersons)
         setFilteredPersons(updatedPersons)
@@ -16,10 +16,10 @@ const handleDelete = (deletePerson, persons, setPersons, setFilteredPersons) => 
 }
 
 const Contact = ({ person, persons, setPersons, setFilteredPersons }) =>
-<>
-  {person.name} {person.number} <button onClick={() => handleDelete(person, persons, setPersons, setFilteredPersons)}> 
-    delete
+  <>
+    {person.name} {person.number} <button onClick={() => handleDelete(person, persons, setPersons, setFilteredPersons)}>
+      delete
     </button><br />
-</>
+  </>
 
 export default Contact
