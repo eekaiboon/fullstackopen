@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import personService from '../services/persons'
 
-const PersonForm = ({persons, setPersons, setFilteredPersons, setSuccessMessage, setErrorMessage}) => {
+const PersonForm = ({ persons, setPersons, setFilteredPersons, setSuccessMessage, setErrorMessage }) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
@@ -19,10 +19,10 @@ const PersonForm = ({persons, setPersons, setFilteredPersons, setSuccessMessage,
     event.preventDefault()
 
     const dup = persons.find(person => person.name === newName)
-    
+
     if (dup) {
-      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        const updatePerson = {...dup, number: newNumber}
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const updatePerson = { ...dup, number: newNumber }
 
         personService
           .update(updatePerson)
@@ -43,17 +43,19 @@ const PersonForm = ({persons, setPersons, setFilteredPersons, setSuccessMessage,
       const newPerson = {
         name: newName,
         number: newNumber,
-        id: String(persons.length+1)
+        id: String(persons.length + 1)
       }
-      
+
       personService
-        .create(newPerson)
+        .create(newPerson, setErrorMessage)
         .then(newPerson => {
-          const newPersons = persons.concat(newPerson)
-          setPersons(newPersons)
-          setFilteredPersons(newPersons)
-          setSuccessMessage(`Added ${newName}`)
-      })
+          if (newPerson) {
+            const newPersons = persons.concat(newPerson)
+            setPersons(newPersons)
+            setFilteredPersons(newPersons)
+            setSuccessMessage(`Added ${newName}`)
+          }
+        })
     }
 
     setNewName('')
@@ -61,24 +63,24 @@ const PersonForm = ({persons, setPersons, setFilteredPersons, setSuccessMessage,
   }
 
   return <>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input 
-            value={newName}
-            onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          number: <input
-            value={newNumber}
-            onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-    </>
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input
+          value={newName}
+          onChange={handleNameChange}
+        />
+      </div>
+      <div>
+        number: <input
+          value={newNumber}
+          onChange={handleNumberChange}
+        />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  </>
 }
 
 export default PersonForm
